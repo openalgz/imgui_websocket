@@ -4,6 +4,10 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) over WebSockets
 
+> [!CAUTION]
+>
+> This is an experimental fork and should not be used.
+
 This is a small library that allows to stream a Dear ImGui scene to multiple WebSocket clients at once. This is achieved by sending Dear ImGui's DrawData structure which is then rendered in the browser using WebGL. To reduce the amount of network traffic, we send only the diffs between sequential frames (for more info - see [#1](../../issues/1/)).
 
 ## Live examples
