@@ -8,3 +8,4 @@ data/
 .vscode
 .cquery_cache
 *.code-workspace
+.DS_Store
