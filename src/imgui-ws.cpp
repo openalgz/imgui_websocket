@@ -20,7 +20,7 @@
 #include <condition_variable>
 
 // not using ssl
-using incppect = Incppect<false>;
+using namespace incppect;
 
 struct ImGuiWS::Impl {
     struct Events {
@@ -56,7 +56,7 @@ struct ImGuiWS::Impl {
 
     Events events;
 
-    incppect incpp;
+    Incppect <false> incpp;
 
     THandler handlerConnect;
     THandler handlerDisconnect;
@@ -164,8 +164,10 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
 
         event.clientId = clientId;
 
+        using enum incppect::EventType;
+
         switch (etype) {
-            case incppect::Connect:
+            case Connect:
                 {
                     ++m_impl->nConnected;
                     event.type = Event::Connected;
@@ -180,7 +182,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
                     }
                 }
                 break;
-            case incppect::Disconnect:
+            case Disconnect:
                 {
                     --m_impl->nConnected;
                     event.type = Event::Disconnected;
@@ -189,7 +191,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
                     }
                 }
                 break;
-            case incppect::Custom:
+            case Custom:
                 {
                     std::stringstream ss;
                     ss << data;

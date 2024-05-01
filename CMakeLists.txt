@@ -11,6 +11,9 @@ else()
 endif()
 
 # options
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(IMGUI_WS_ALL_WARNINGS            "imgui-ws: enable all compiler warnings" ${IMGUI_WS_STANDALONE})
 option(IMGUI_WS_ALL_WARNINGS_3RD_PARTY  "imgui-ws: enable all compiler warnings in 3rd party libs" OFF)
