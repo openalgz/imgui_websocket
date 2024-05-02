@@ -15,6 +15,26 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (MSVC)
+    # Suppress warning C4996 (deprecated declarations) for Visual Studio
+    add_compile_options(/wd4996)
+    add_compile_options(/wd4100)
+
+elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
+    # Suppress warnings about deprecated OpenSSL functions for GCC and Clang
+    add_compile_options(-Wno-deprecated-declarations)
+    add_compile_options(-Wunused-parameter)
+
+endif()
+
+if (IMGUI_WS_ALL_WARNINGS)
+    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+    else()
+        message("Warning imgui-ws is not supported on Windows!")
+    endif()
+endif()
+
 option(IMGUI_WS_ALL_WARNINGS            "imgui-ws: enable all compiler warnings" ${IMGUI_WS_STANDALONE})
 option(IMGUI_WS_ALL_WARNINGS_3RD_PARTY  "imgui-ws: enable all compiler warnings in 3rd party libs" OFF)
 
@@ -57,9 +77,6 @@ endif()
 # main
 
 find_package(Threads REQUIRED)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
