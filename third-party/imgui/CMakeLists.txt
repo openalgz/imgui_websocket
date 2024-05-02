@@ -4,6 +4,18 @@ else (APPLE)
     unset(ADDITIONAL_LIBRARIES)
 endif (APPLE)
 
+if (MSVC)
+    # Suppress warning C4996 (deprecated declarations) for Visual Studio
+    add_compile_options(/wd4996)
+    add_compile_options(/wd4100)
+
+elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
+    # Suppress warnings about deprecated OpenSSL functions for GCC and Clang
+    add_compile_options(-Wno-deprecated-declarations)
+    add_compile_options(-Wunused-parameter)
+
+endif()
+
 add_library(imgui
     imgui/imgui.cpp
     imgui/imgui_draw.cpp
