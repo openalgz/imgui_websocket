@@ -17,23 +17,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if (MSVC)
     # Suppress warning C4996 (deprecated declarations) for Visual Studio
-    add_compile_options(/wd4996)
-    add_compile_options(/wd4100)
+    add_compile_options(/wd4996 /wd4100)
 
 elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
     # Suppress warnings about deprecated OpenSSL functions for GCC and Clang
-    add_compile_options(-Wno-deprecated-declarations)
-    add_compile_options(-Wunused-parameter)
+    add_compile_options(-Wno-deprecated-declarations -Wunused-parameter)
 
 endif()
 
-if (IMGUI_WS_ALL_WARNINGS)
-    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
-    else()
-        message("Warning imgui-ws is not supported on Windows!")
-    endif()
+if (IMGUI_WS_ALL_WARNINGS AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    # Enable all warnings for GCC and Clang
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+
+elseif (IMGUI_WS_ALL_WARNINGS)
+    message(WARNING "imgui-ws is not supported on Windows!")
 endif()
+
 
 option(IMGUI_WS_ALL_WARNINGS            "imgui-ws: enable all compiler warnings" ${IMGUI_WS_STANDALONE})
 option(IMGUI_WS_ALL_WARNINGS_3RD_PARTY  "imgui-ws: enable all compiler warnings in 3rd party libs" OFF)
