@@ -24,24 +24,22 @@ elseif (IMGUI_WS_ALL_WARNINGS)
     message(WARNING "imgui-ws is not supported on Windows!")
 endif()
 
-
-file(READ "imgui-ws.js" src_imgui-ws_js)
+file(READ "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/imgui-ws.js" src_imgui-ws_js)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
 
-
 add_library(imgui-ws ${IMTUI_LIBRARY_TYPE}
-    imgui-ws.cpp
-    compressor-xor-rle-per-draw-list.cpp
-    compressor-xor-rle-per-draw-list-with-vtx-offset.cpp
-    )
+    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/imgui-ws.cpp"
+    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/compressor-xor-rle-per-draw-list.cpp"
+    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/compressor-xor-rle-per-draw-list-with-vtx-offset.cpp"
+)
 
 target_include_directories(imgui-ws PUBLIC
-    ../include
+    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/include"
     "${CMAKE_BINARY_DIR}/_deps/imgui-src"
     "${CMAKE_BINARY_DIR}/_deps/incppect-src/include"
     "${CMAKE_BINARY_DIR}/_deps/uwebsockets-src/src"
     "${CMAKE_BINARY_DIR}/_deps/uwebsockets-src/uSockets/src"
-    )
+)
 
 target_link_libraries(imgui-ws PRIVATE
     incppect::incppect
@@ -50,3 +48,7 @@ target_link_libraries(imgui-ws PRIVATE
 )
 
 add_imgui(${PROJECT_NAME})
+
+add_library(imguiws_imguiws INTERFACE)
+target_link_libraries(imguiws_imguiws INTERFACE imgui-ws)
+add_library(imguiws::imguiws ALIAS imguiws_imguiws)
