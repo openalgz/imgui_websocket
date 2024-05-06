@@ -4,23 +4,26 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if (MSVC)
     # Suppress warning C4996 (deprecated declarations) for Visual Studio
-    add_compile_options(/wd4996)
+    add_compile_options(/wd4996 /wd4100)
+
 elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
     # Suppress warnings about deprecated OpenSSL functions for GCC and Clang
-    add_compile_options(-Wno-deprecated-declarations)
+    add_compile_options(
+      -Wno-deprecated-declarations 
+      -Wunused-parameter
+      -Wno-sign-compare
+    )
+
 endif()
 
-if (IMGUI_WS_ALL_WARNINGS)
-    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
-    else()
-        message("Warning imgui-ws is not supported on Windows!")
-    endif()
+if (IMGUI_WS_ALL_WARNINGS AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    # Enable all warnings for GCC and Clang
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+
+elseif (IMGUI_WS_ALL_WARNINGS)
+    message(WARNING "imgui-ws is not supported on Windows!")
 endif()
 
-if (UNIX)
-    add_compile_options(-Wno-sign-compare)
-endif()
 
 file(READ "imgui-ws.js" src_imgui-ws_js)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
@@ -33,7 +36,8 @@ add_library(imgui-ws ${IMTUI_LIBRARY_TYPE}
 
 target_include_directories(imgui-ws PUBLIC
     ../include
-    ../third-party/incppect/include
+    "${CMAKE_BINARY_DIR}/_deps/imgui-src"
+    "${CMAKE_BINARY_DIR}/_deps/incppect-src/include"
     "${CMAKE_BINARY_DIR}/_deps/uwebsockets-src/src"
     "${CMAKE_BINARY_DIR}/_deps/uwebsockets-src/uSockets/src"
     )
@@ -43,4 +47,4 @@ target_link_libraries(imgui-ws PRIVATE
     incppect::incppect
     ${CMAKE_DL_LIBS}
     ${CMAKE_THREAD_LIBS_INIT}
-    )
+)

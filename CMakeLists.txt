@@ -21,7 +21,11 @@ if (MSVC)
 
 elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
     # Suppress warnings about deprecated OpenSSL functions for GCC and Clang
-    add_compile_options(-Wno-deprecated-declarations -Wunused-parameter)
+    add_compile_options(
+      -Wno-deprecated-declarations 
+      -Wunused-parameter
+      -Wno-sign-compare
+    )
 
 endif()
 
@@ -82,10 +86,40 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo")
 endif ()
 
-add_subdirectory(third-party)
-add_subdirectory(src)
+   # Add Imgui, uWebSockets, incppect, etc. libraries:
+   #
+   FetchContent_Declare(
+      "uwebsockets"
+      GIT_REPOSITORY "https://github.com/uNetworking/uWebSockets"
+      GIT_TAG "v20.62.0" 
+      GIT_SUBMODULES_RECURSE YES
+      GIT_SHALLOW TRUE
+   )
+   FetchContent_MakeAvailable("uwebsockets")
+    
+   FetchContent_Declare(
+      "incppect"
+      GIT_REPOSITORY "https://github.com/stephenberry/incppect.git"
+      GIT_TAG "flatten" # updated header only version
+      GIT_SHALLOW TRUE
+   )
+   FetchContent_MakeAvailable("incppect")
+   
+   FetchContent_Declare(
+      "imgui"
+      GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
+      GIT_TAG "v1.90.5"
+      GIT_SHALLOW TRUE
+      # GIT_PROGRESS FALSE
+   )
+   FetchContent_MakeAvailable("imgui")
+   
+   add_subdirectory("${CMAKE_BINARY_DIR}/_deps/uwebsockets-ws")
+   add_subdirectory("${CMAKE_BINARY_DIR}/_deps/imgui-ws")
+   add_subdirectory("${CMAKE_BINARY_DIR}/_deps/incppect")
+   add_subdirectory(src)
 
-if (IMGUI_WS_STANDALONE)
+#if (IMGUI_WS_STANDALONE)
     add_subdirectory(examples)
     add_subdirectory(tools)
-endif()
+#endif()
