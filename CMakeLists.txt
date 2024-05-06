@@ -1,6 +1,15 @@
 cmake_minimum_required (VERSION 3.10)
 project(imgui-ws)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(IMGUI_WS_STANDALONE ON)
+    set(IMGUI_WS_WORKING_DIR "${CMAKE_SOURCE_DIR}")
+else()
+    set(IMGUI_WS_STANDALONE OFF)
+    set(IMGUI_WS_WORKING_DIR "${CMAKE_SOURCE_DIR}_deps/imgui-ws-src")
+endif()
+
+
 macro(suppress_compile_warnings)
     if (MSVC)
         # Suppress warning C4996 (deprecated declarations) for Visual Studio
@@ -31,6 +40,10 @@ macro(add_imgui target_name)
             ${imgui_SOURCE_DIR}/imgui_draw.cpp
             ${imgui_SOURCE_DIR}/imgui_tables.cpp
             ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+            #
+            ${implot_SOURCE_DIR}/implot.cpp
+            ${implot_SOURCE_DIR}/implot_items.cpp
+            ${implot_SOURCE_DIR}/implot_demo.cpp
         )
     endif()
     add_dependencies(${target_name} imgui)   
@@ -39,12 +52,6 @@ endmacro()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS "on")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(IMGUI_WS_STANDALONE ON)
-else()
-    set(IMGUI_WS_STANDALONE OFF)
-endif()
 
 # options
 set(CMAKE_CXX_STANDARD 20)
@@ -134,7 +141,17 @@ include(FetchContent)
    )
    FetchContent_MakeAvailable("imgui")
 
-   include_directories(${imgui_SOURCE_DIR}/include)
+   FetchContent_Declare(
+      "implot"
+      GIT_REPOSITORY "https://github.com/epezent/implot.git"
+      GIT_TAG "v0.16"
+      GIT_SHALLOW TRUE
+      # GIT_PROGRESS FALSE
+   )
+   FetchContent_MakeAvailable("implot")
+
+   include_directories(${imgui_SOURCE_DIR})
+   include_directories(${implot_SOURCE_DIR})
    
    add_subdirectory(src)
 

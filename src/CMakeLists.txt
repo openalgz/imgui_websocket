@@ -24,18 +24,19 @@ elseif (IMGUI_WS_ALL_WARNINGS)
     message(WARNING "imgui-ws is not supported on Windows!")
 endif()
 
-file(READ "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/imgui-ws.js" src_imgui-ws_js)
+file(READ "${IMGUI_WS_WORKING_DIR}/src/imgui-ws.js" src_imgui-ws_js)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
 
 add_library(imgui-ws ${IMTUI_LIBRARY_TYPE}
-    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/imgui-ws.cpp"
-    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/compressor-xor-rle-per-draw-list.cpp"
-    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/src/compressor-xor-rle-per-draw-list-with-vtx-offset.cpp"
+    "${IMGUI_WS_WORKING_DIR}/src/imgui-ws.cpp"
+    "${IMGUI_WS_WORKING_DIR}/src/compressor-xor-rle-per-draw-list.cpp"
+    "${IMGUI_WS_WORKING_DIR}/src/compressor-xor-rle-per-draw-list-with-vtx-offset.cpp"
 )
 
 target_include_directories(imgui-ws PUBLIC
-    "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src/include"
+    "${IMGUI_WS_WORKING_DIR}/include"
     "${CMAKE_BINARY_DIR}/_deps/imgui-src"
+    "${CMAKE_BINARY_DIR}/_deps/implot-src"
     "${CMAKE_BINARY_DIR}/_deps/incppect-src/include"
     "${CMAKE_BINARY_DIR}/_deps/uwebsockets-src/src"
     "${CMAKE_BINARY_DIR}/_deps/uwebsockets-src/uSockets/src"
