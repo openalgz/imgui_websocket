@@ -6,7 +6,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(IMGUI_WS_WORKING_DIR "${CMAKE_SOURCE_DIR}")
 else()
     set(IMGUI_WS_STANDALONE OFF)
-    set(IMGUI_WS_WORKING_DIR "${CMAKE_SOURCE_DIR}_deps/imgui-ws-src")
+    set(IMGUI_WS_WORKING_DIR "${CMAKE_BINARY_DIR}/_deps/imgui-ws-src")
 endif()
 
 
