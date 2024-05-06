@@ -119,9 +119,6 @@ include(FetchContent)
    )
    FetchContent_MakeAvailable("imgui")
    
-   add_subdirectory("${CMAKE_BINARY_DIR}/_deps/uwebsockets-src")
-   add_subdirectory("${CMAKE_BINARY_DIR}/_deps/imgui-src")
-   add_subdirectory("${CMAKE_BINARY_DIR}/_deps/incppect-src")
    add_subdirectory(src)
 
 #if (IMGUI_WS_STANDALONE)
