@@ -4,7 +4,11 @@
 
 #include "imgui-ws/imgui-draw-data-compressor.h"
 
-#include "imgui/imgui.h"
+#if __has_include("imgui/imgui.h")
+#  include "imgui/imgui.h"
+#else
+#  include "imgui.h"
+#endif
 
 #include <cstring>
 
