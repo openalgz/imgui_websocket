@@ -89,15 +89,18 @@ endif ()
 include(FetchContent)
 
    # Add Imgui, uWebSockets, incppect, etc. libraries:
+   # 
+   
+   # incppect fetches uWebSockets
    #
-   FetchContent_Declare(
-      "uwebsockets"
-      GIT_REPOSITORY "https://github.com/uNetworking/uWebSockets"
-      GIT_TAG "v20.62.0" 
-      GIT_SUBMODULES_RECURSE YES
-      GIT_SHALLOW TRUE
-   )
-   FetchContent_MakeAvailable("uwebsockets")
+   # FetchContent_Declare(
+   #    "uwebsockets"
+   #    GIT_REPOSITORY "https://github.com/uNetworking/uWebSockets"
+   #    GIT_TAG "v20.62.0" 
+   #    GIT_SUBMODULES_RECURSE YES
+   #    GIT_SHALLOW TRUE
+   # )
+   # FetchContent_MakeAvailable("uwebsockets")
     
    FetchContent_Declare(
       "incppect"
