@@ -1,5 +1,15 @@
-#include "imgui/imgui.h"
-#include "imgui-ws/imgui-ws.h"
+#if __has_include("imgui/imgui.h")
+#  include "imgui/imgui.h"
+#else
+#  include "imgui.h"
+#endif
+
+#if __has_include("imgui-ws/imgui-ws.h")
+#  include "imgui-ws/imgui-ws.h"
+#else
+#  include "imgui-ws.h"
+#endif
+
 
 #include "common.h"
 
