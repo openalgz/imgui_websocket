@@ -28,6 +28,7 @@ endif()
 file(READ "imgui-ws.js" src_imgui-ws_js)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
 
+
 add_library(imgui-ws ${IMTUI_LIBRARY_TYPE}
     imgui-ws.cpp
     compressor-xor-rle-per-draw-list.cpp
@@ -43,8 +44,9 @@ target_include_directories(imgui-ws PUBLIC
     )
 
 target_link_libraries(imgui-ws PRIVATE
-    imgui
     incppect::incppect
     ${CMAKE_DL_LIBS}
     ${CMAKE_THREAD_LIBS_INIT}
 )
+
+add_imgui(${PROJECT_NAME})

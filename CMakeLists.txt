@@ -23,6 +23,20 @@ macro(suppress_compile_warnings)
     endif()
 endmacro()
 
+macro(add_imgui target_name)
+    if (NOT TARGET imgui)
+        add_library(imgui STATIC
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui_demo.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
+            ${imgui_SOURCE_DIR}/imgui_tables.cpp
+            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+        )
+    endif()
+    add_dependencies(${target_name} imgui)   
+    target_link_libraries(${target_name} PRIVATE imgui)
+endmacro()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS "on")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -119,6 +133,8 @@ include(FetchContent)
       # GIT_PROGRESS FALSE
    )
    FetchContent_MakeAvailable("imgui")
+
+   include_directories(${imgui_SOURCE_DIR}/include)
    
    add_subdirectory(src)
 
