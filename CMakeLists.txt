@@ -14,7 +14,7 @@ macro(suppress_compile_warnings)
     if (MSVC)
         # Suppress warning C4996 (deprecated declarations) for Visual Studio
         add_compile_options(/wd4996 /wd4100 /wd4267 /wd4996)
-    elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
+    else()
         # Suppress warnings about deprecated OpenSSL functions and unused parameters for GCC and Clang
         add_compile_options(
             -Wno-deprecated-declarations
