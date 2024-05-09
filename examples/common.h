@@ -6,6 +6,98 @@
 
 #include <chrono>
 #include <thread>
+#include <format>
+#include <iostream>
+#include <filesystem>
+
+#if __has_include("imgui/imgui.h")
+#  include "imgui/imgui.h"
+#else
+#  include "imgui.h"
+#endif
+
+#if __has_include("imgui-ws/imgui-ws.h")
+#  include "imgui-ws/imgui-ws.h"
+#else
+#  include "imgui-ws.h"
+#endif
+
+ImGuiWS& start_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
+{
+    namespace fs = std::filesystem;
+
+    printf("Usage: %s [port] [http-root]\n", argv[0]);
+
+    std::string httpRoot = http_root;
+
+    if (argc > 1) port = atoi(argv[1]);
+    if (argc > 2) httpRoot = argv[2];
+
+    std::string rp(http_root);
+    rp.append(example_name).append("/").append(index_html);
+
+    // Check for resource:
+    fs::path resource_path(rp);
+    resource_path = fs::absolute(resource_path);
+    if (not fs::exists(resource_path)){
+
+        std::cerr
+                << "Resource, '"
+                << resource_path.string()
+                << "' could not be found!\nExiting '"
+                << example_name
+                << "' startup!";
+
+        exit(0);
+    }
+
+    std::cout << "localhost:" << port;
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    static ImGuiWS imguiWS;
+    imguiWS.init(port, httpRoot + example_name, { "", index_html });
+
+    return imguiWS;
+}
+
+ImGuiWS& init_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
+{
+    namespace fs = std::filesystem;
+
+    printf("Usage: %s [port] [http-root]\n", argv[0]);
+
+    std::string httpRoot = http_root;
+
+    if (argc > 1) port = atoi(argv[1]);
+    if (argc > 2) httpRoot = argv[2];
+
+    std::string rp(http_root);
+    rp.append(example_name).append("/").append(index_html);
+
+    // Check for resource:
+    fs::path resource_path(rp);
+    resource_path = fs::absolute(resource_path);
+    if (not fs::exists(resource_path)){
+
+        std::cerr
+                << "Resource, '"
+                << resource_path.string()
+                << "' could not be found!\nExiting '"
+                << example_name
+                << "' startup!";
+
+        exit(0);
+    }
+
+    std::cout << "localhost:" << port;
+
+    static ImGuiWS imguiWS;
+    imguiWS.init(port, httpRoot + example_name, { "", index_html });
+
+    return imguiWS;
+}
 
 struct VSync {
     VSync(double rate_fps = 60.0) : tStep_us(1000000.0/rate_fps) {}

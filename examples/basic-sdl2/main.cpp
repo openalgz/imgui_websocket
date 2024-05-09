@@ -1,15 +1,4 @@
-#if __has_include("imgui/imgui.h")
-#  include "imgui/imgui.h"
-#else
-#  include "imgui.h"
-#endif
-
-#if __has_include("imgui-ws/imgui-ws.h")
-#  include "imgui-ws/imgui-ws.h"
-#else
-#  include "imgui-ws.h"
-#endif
-
+#include "common.h"
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -18,8 +7,8 @@
 int main(int argc , char ** argv) {
     printf("Usage: %s [port] [http-root]\n", argv[0]);
 
-    int port = 5000;
-    std::string httpRoot = "../examples";
+    int port = 3001;
+    std::string httpRoot = "../../examples";
 
     if (argc > 1) port = atoi(argv[1]);
     if (argc > 2) httpRoot = argv[2];
@@ -49,8 +38,7 @@ int main(int argc , char ** argv) {
     ImGui::StyleColorsDark();
 
     // setup imgui-ws
-    ImGuiWS imguiWS;
-    imguiWS.init(port, httpRoot + "/basic-sdl2", { "", "index.html" });
+    auto& imguiWS = init_imgui_ws(argc, argv, "/basic-sdl2", 3001);
 
     // prepare font texture
     {

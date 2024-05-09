@@ -1,16 +1,3 @@
-#if __has_include("imgui/imgui.h")
-#  include "imgui/imgui.h"
-#else
-#  include "imgui.h"
-#endif
-
-#if __has_include("imgui-ws/imgui-ws.h")
-#  include "imgui-ws/imgui-ws.h"
-#else
-#  include "imgui-ws.h"
-#endif
-
-
 #include "common.h"
 
 #include <map>
@@ -175,18 +162,10 @@ struct State {
 };
 
 int main(int argc, char ** argv) {
-    printf("Usage: %s [port] [http-root]\n", argv[0]);
-
-    int port = 5000;
-    std::string httpRoot = "../examples";
-
-    if (argc > 1) port = atoi(argv[1]);
-    if (argc > 2) httpRoot = argv[2];
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::GetIO().MouseDrawCursor = true;
-
     ImGui::StyleColorsDark();
     ImGui::GetStyle().AntiAliasedFill = false;
     ImGui::GetStyle().AntiAliasedLines = false;
@@ -194,8 +173,7 @@ int main(int argc, char ** argv) {
     ImGui::GetStyle().ScrollbarRounding = 0.0f;
 
     // setup imgui-ws
-    ImGuiWS imguiWS;
-    imguiWS.init(port, httpRoot + "/demo-null", { "", "index.html" });
+    auto& imguiWS = init_imgui_ws(argc, argv, "/demo-null", 3002);
 
     // prepare font texture
     {
