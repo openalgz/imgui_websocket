@@ -1,38 +1,23 @@
-#if __has_include("imgui/imgui.h")
-#  include "imgui/imgui.h"
-#else
-#  include "imgui.h"
-#endif
-
-#if __has_include("imgui-ws/imgui-ws.h")
-#  include "imgui-ws/imgui-ws.h"
-#else
-#  include "imgui-ws.h"
-#endif
-
-
-#include "common.h"
+#include "examples-common.h"
 
 int main(int argc, char ** argv) {
+
+
+    auto& imguiWS = start_imgui_ws(argc, argv, "basic-null", 3000);
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+/*
     printf("Usage: %s [port] [http-root]\n", argv[0]);
-
-    int port = 5000;
-    std::string httpRoot = "../examples";
-
+    int port = 3000;
+    std::string httpRoot = "../../examples";
     if (argc > 1) port = atoi(argv[1]);
     if (argc > 2) httpRoot = argv[2];
-
-    // init dear imgui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-
     ImGui::StyleColorsDark();
-
-    // setup imgui-ws
     ImGuiWS imguiWS;
     imguiWS.init(port, httpRoot + "/basic-null", { "", "index.html" });
-
+*/
     // prepare font texture
     {
         unsigned char * pixels;
