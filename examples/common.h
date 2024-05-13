@@ -22,7 +22,7 @@
 #  include "imgui-ws.h"
 #endif
 
-ImGuiWS& start_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
+inline ImGuiWS& start_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
 {
     namespace fs = std::filesystem;
 
@@ -33,8 +33,14 @@ ImGuiWS& start_imgui_ws(int argc, char ** argv, const char* example_name, int po
     if (argc > 1) port = atoi(argv[1]);
     if (argc > 2) httpRoot = argv[2];
 
-    std::string rp(http_root);
-    rp.append(example_name).append("/").append(index_html);
+   std::string rp(http_root);
+   if (fs::exists(example_name)) {
+      rp = example_name;
+      rp.append("/").append(index_html);
+   }
+   else {
+      rp.append(example_name).append("/").append(index_html);
+   }
 
     // Check for resource:
     fs::path resource_path(rp);
@@ -62,7 +68,7 @@ ImGuiWS& start_imgui_ws(int argc, char ** argv, const char* example_name, int po
     return imguiWS;
 }
 
-ImGuiWS& init_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
+inline ImGuiWS& init_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
 {
     namespace fs = std::filesystem;
 
@@ -72,9 +78,15 @@ ImGuiWS& init_imgui_ws(int argc, char ** argv, const char* example_name, int por
 
     if (argc > 1) port = atoi(argv[1]);
     if (argc > 2) httpRoot = argv[2];
-
-    std::string rp(http_root);
-    rp.append(example_name).append("/").append(index_html);
+   
+   std::string rp(http_root);
+   if (fs::exists(example_name)) {
+      rp = example_name;
+      rp.append("/").append(index_html);
+   }
+   else {
+      rp.append(example_name).append("/").append(index_html);
+   }
 
     // Check for resource:
     fs::path resource_path(rp);
