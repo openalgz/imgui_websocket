@@ -20,7 +20,7 @@
 #include <condition_variable>
 
 // not using ssl
-using namespace incppect;
+using incppect = Incppect<false>;
 
 struct ImGuiWS::Impl {
     struct Events {
@@ -159,15 +159,13 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
         return std::string_view { data.data(), data.size() };
     });
 
-    m_impl->incpp.handler = [&](int clientId, incppect::EventType etype, std::string_view data) {
+    m_impl->incpp.handler([&](int clientId, incppect::EventType etype, std::string_view data) {
         Event event;
 
         event.clientId = clientId;
 
-        using enum incppect::EventType;
-
         switch (etype) {
-            case Connect:
+            case incppect::Connect:
                 {
                     ++m_impl->nConnected;
                     event.type = Event::Connected;
@@ -182,7 +180,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
                     }
                 }
                 break;
-            case Disconnect:
+            case incppect::Disconnect:
                 {
                     --m_impl->nConnected;
                     event.type = Event::Disconnected;
@@ -191,7 +189,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
                     }
                 }
                 break;
-            case Custom:
+            case incppect::Custom:
                 {
                     std::stringstream ss;
                     ss << data;
@@ -278,7 +276,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
         };
 
         m_impl->events.push(std::move(event));
-    };
+    });
 
     resources.push_back("imgui-ws.js");
     m_impl->incpp.setResource("/imgui-ws.js", kImGuiWS_js);

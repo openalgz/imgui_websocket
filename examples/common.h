@@ -106,7 +106,7 @@ inline ImGuiWS& init_imgui_ws(int argc, char ** argv, const char* example_name, 
     std::cout << "localhost:" << port;
 
     static ImGuiWS imguiWS;
-    imguiWS.init(port, httpRoot + example_name, { "", index_html });
+    imguiWS.init(port, resource_path.string(), { "", index_html });
 
     return imguiWS;
 }

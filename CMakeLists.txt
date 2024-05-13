@@ -21,6 +21,7 @@ macro(suppress_compile_warnings)
             -Wunused-parameter
             -Wno-sign-compare
             -Wno-unused-parameter
+            -Wunused-variable
         )
     endif()
 
@@ -126,8 +127,8 @@ include(FetchContent)
     
    FetchContent_Declare(
       "incppect"
-      GIT_REPOSITORY "https://github.com/stephenberry/incppect.git"
-      GIT_TAG "flatten" # updated header only version
+      GIT_REPOSITORY "https://github.com/openalgz/incppect"
+      GIT_TAG "master"
       GIT_SHALLOW TRUE
    )
    FetchContent_MakeAvailable("incppect")
