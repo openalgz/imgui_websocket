@@ -45,7 +45,7 @@ void regenerate(ImGuiWS & imguiWS, int time) {
 
 int main(int argc, char ** argv) {
 
-    auto& imguiWS = start_imgui_ws(argc, argv, "/textures-null", 3003);
+    auto& imguiWS = start_imgui_ws(argc, argv, "../../examples", "basic-null", "index.html", 3003);
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 

@@ -173,7 +173,7 @@ int main(int argc, char ** argv) {
     ImGui::GetStyle().ScrollbarRounding = 0.0f;
 
     // setup imgui-ws
-    auto& imguiWS = init_imgui_ws(argc, argv, "/demo-null", 3002);
+    auto& imguiWS = init_imgui_ws(argc, argv, "../../examples", "basic-null", "index.html", 3002);
 
     // prepare font texture
     {

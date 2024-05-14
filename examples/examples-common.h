@@ -22,91 +22,60 @@
 #  include "imgui-ws.h"
 #endif
 
-inline ImGuiWS& start_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
+inline ImGuiWS& start_imgui_ws(int argc, char ** argv, std::string http_root_dir , const std::string_view example_dir_name, const char* index_html_file_name, int port)
 {
     namespace fs = std::filesystem;
 
+    static ImGuiWS imguiWS;
+
     printf("Usage: %s [port] [http-root]\n", argv[0]);
 
-    std::string httpRoot = http_root;
-
+    // Override the port or http root directory.
     if (argc > 1) port = atoi(argv[1]);
-    if (argc > 2) httpRoot = argv[2];
+    if (argc > 2) http_root_dir = argv[2];
 
-   std::string rp(http_root);
-   if (fs::exists(example_name)) {
-      rp = example_name;
-      rp.append("/").append(index_html);
-   }
-   else {
-      rp.append(example_name).append("/").append(index_html);
-   }
+    auto resource_path = std::format("{}/{}/{}", http_root_dir, example_dir_name, index_html_file_name);
+    resource_path = fs::absolute(resource_path).string();
 
-    // Check for resource:
-    fs::path resource_path(rp);
-    resource_path = fs::absolute(resource_path);
     if (not fs::exists(resource_path)){
-
-        std::cerr
-                << "Resource, '"
-                << resource_path.string()
-                << "' could not be found!\nExiting '"
-                << example_name
-                << "' startup!";
-
+        std::cerr << std::format("Resource, '{}', could not be found!\nExiting '{}' startup.\n", resource_path, example_dir_name);
         exit(0);
     }
 
-    std::cout << "localhost:" << port;
+    std::cout << "\nurl:localhost:" << port << std:endl;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    static ImGuiWS imguiWS;
-    imguiWS.init(port, httpRoot + example_name, { "", index_html });
+
+    imguiWS.init(port, http_root_dir + std::string("/") + std::string(example_dir_name), { "", index_html_file_name });
 
     return imguiWS;
 }
 
-inline ImGuiWS& init_imgui_ws(int argc, char ** argv, const char* example_name, int port = 3000, const char* http_root = "../../examples", const char* index_html = "index.html")
+inline ImGuiWS& init_imgui_ws(int argc, char ** argv, std::string http_root_dir , const std::string_view example_dir_name, const char* index_html_file_name, int port)
 {
     namespace fs = std::filesystem;
 
+    static ImGuiWS imguiWS;
+
     printf("Usage: %s [port] [http-root]\n", argv[0]);
 
-    std::string httpRoot = http_root;
-
+    // Override the port or http root directory.
     if (argc > 1) port = atoi(argv[1]);
-    if (argc > 2) httpRoot = argv[2];
-   
-   std::string rp(http_root);
-   if (fs::exists(example_name)) {
-      rp = example_name;
-      rp.append("/").append(index_html);
-   }
-   else {
-      rp.append(example_name).append("/").append(index_html);
-   }
+    if (argc > 2) http_root_dir = argv[2];
 
-    // Check for resource:
-    fs::path resource_path(rp);
-    resource_path = fs::absolute(resource_path);
+    auto resource_path = std::format("{}/{}/{}", http_root_dir, example_dir_name, index_html_file_name);
+    resource_path = fs::absolute(resource_path).string();
+
     if (not fs::exists(resource_path)){
-
-        std::cerr
-                << "Resource, '"
-                << resource_path.string()
-                << "' could not be found!\nExiting '"
-                << example_name
-                << "' startup!";
-
+        std::cerr << std::format("Resource, '{}', could not be found!\nExiting '{}' startup.\n", resource_path, example_dir_name);
         exit(0);
     }
 
-    std::cout << "localhost:" << port;
+    std::cout << "\nurl: localhost:" << port << std::endl;
 
-    static ImGuiWS imguiWS;
-    imguiWS.init(port, resource_path.string(), { "", index_html });
+    imguiWS.init(port, http_root_dir + std::string("/") + std::string(example_dir_name), { "", index_html_file_name });
 
     return imguiWS;
 }

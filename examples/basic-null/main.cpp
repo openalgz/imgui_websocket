@@ -2,7 +2,8 @@
 
 int main(int argc, char ** argv) {
 
-    auto& imguiWS = start_imgui_ws(argc, argv, "/basic-null", 3000);
+    auto& imguiWS = start_imgui_ws(argc, argv, "../../examples", "basic-null", "index.html", 3000);
+    
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 
