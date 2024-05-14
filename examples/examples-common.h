@@ -42,7 +42,7 @@ inline ImGuiWS& start_imgui_ws(int argc, char ** argv, std::string http_root_dir
         exit(0);
     }
 
-    std::cout << "\nurl:localhost:" << port << std:endl;
+    std::cout << "\nurl:localhost:" << port << std::endl;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
