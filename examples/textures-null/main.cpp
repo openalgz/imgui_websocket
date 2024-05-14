@@ -1,4 +1,4 @@
-#include "common.h"
+#include "examples-common.h"
 
 // texture IDs - these are user generated. Use whatever fits you
 uint32_t g_texture0Id = 100;
