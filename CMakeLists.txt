@@ -18,11 +18,10 @@ macro(suppress_compile_warnings)
         # Suppress warnings about deprecated OpenSSL functions and unused parameters for GCC and Clang
         add_compile_options(
             -Wno-deprecated-declarations
-            -Wunused-parameter
             -Wno-sign-compare
             -Wno-unused-parameter
-            -Wunused-variable
-        )
+            -Wno-unused-variable       
+             )
     endif()
 
     if (IMGUI_WS_ALL_WARNINGS AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"))

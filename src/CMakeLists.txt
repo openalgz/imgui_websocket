@@ -1,3 +1,6 @@
+
+option(USE_INT32 "Use imgui-ws INT32 implementation; If this is false then INT16s are used." FALSE)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -24,7 +27,12 @@ elseif (IMGUI_WS_ALL_WARNINGS)
     message(WARNING "imgui-ws is not supported on Windows!")
 endif()
 
-file(READ "${IMGUI_WS_WORKING_DIR}/src/imgui-ws.js" src_imgui-ws_js)
+if (USE_INT32)
+    file(READ "${IMGUI_WS_WORKING_DIR}/src/imgui-ws-int32.js" src_imgui-ws_js)
+else()
+    file(READ "${IMGUI_WS_WORKING_DIR}/src/imgui-ws-int16.js" src_imgui-ws_js)
+endif()
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
 
 add_library(imgui-ws ${IMTUI_LIBRARY_TYPE}
