@@ -1,14 +1,16 @@
-#include "common.h"
+#include "examples-common.h"
 
 #include <SDL.h>
 #include <SDL_opengl.h>
+
+using namespace examples;
 
 // Main code
 int main(int argc , char ** argv) {
     printf("Usage: %s [port] [http-root]\n", argv[0]);
 
     int port = 3001;
-    std::string httpRoot = "../../examples";
+    std::string httpRoot = truncate_directory_path_at_last_folder(std::filesystem::current_path());
 
     if (argc > 1) port = atoi(argv[1]);
     if (argc > 2) httpRoot = argv[2];

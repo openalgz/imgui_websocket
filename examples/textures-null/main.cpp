@@ -1,5 +1,7 @@
 #include "examples-common.h"
 
+using namespace examples;
+
 // texture IDs - these are user generated. Use whatever fits you
 uint32_t g_texture0Id = 100;
 uint32_t g_texture1Id = 200;
@@ -45,7 +47,7 @@ void regenerate(ImGuiWS & imguiWS, int time) {
 
 int main(int argc, char ** argv) {
 
-    auto& imguiWS = start_imgui_ws(argc, argv, "../../examples", "basic-null", "index.html", 3003);
+    auto& imguiWS = start_imgui_ws(argc, argv, "textures-null", 3003);
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 
