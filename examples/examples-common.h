@@ -47,6 +47,31 @@ namespace examples
     concept is_filesystem_path_or_string =
         std::is_same_v<std::decay_t<StrT_Or_PathT>, std::filesystem::path> || is_string<StrT_Or_PathT>;
 
+    template <is_string T>
+    T &replace_substring_in_source(T &source, const std::string_view substr_to_replace, const std::string_view new_str)
+    {
+        size_t pos = 0;
+        while ((pos = source.find(substr_to_replace, pos)) != T::npos)
+        {
+            source.replace(pos, substr_to_replace.length(), new_str);
+            pos += new_str.length();
+        }
+        return source;
+    }
+
+    template <is_string T>
+    T &replace(const T &str, const std::string_view substr_to_replace, const std::string_view new_str)
+    {
+        T str_ = str;
+        size_t pos = 0;
+        while ((pos = str_.find(substr_to_replace, pos)) != T::npos)
+        {
+            str_.replace(pos, substr_to_replace.length(), new_str);
+            pos += new_str.length();
+        }
+        return str_;
+    }
+
     template <is_filesystem_path_or_string StrT_Or_PathT>
     std::string truncate_directory_path_at_last_folder(const StrT_Or_PathT &path)
     {
