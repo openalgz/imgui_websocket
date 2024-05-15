@@ -126,15 +126,22 @@ namespace examples
         namespace fs = std::filesystem;
 
         static ImGuiWS imguiWS;
-
-        auto http_root_dir = fs::current_path().generic_string().append("/examples");
+      
+#ifdef __APPLE__
+      auto http_root_dir = std::filesystem::current_path().generic_string();
+      std::vector<std::string> buildtypes{"Debug", "Release", "MinSizeRel", "RelWithDebInfo"};
+      for (const auto& type : buildtypes) {
+        replace_substring_in_source(http_root_dir, std::format("/build/bin/{}", type), "");
+      }
+      http_root_dir.append("/examples");
+#else
+      auto http_root_dir = fs::current_path().generic_string().append("/examples");
+#endif
 
         if (not fs::exists(http_root_dir))
         {
             http_root_dir = truncate_directory_path_at_last_folder(fs::current_path());
-            std::cout << "After first truncation: " << http_root_dir << std::endl;
             http_root_dir = truncate_directory_path_at_last_folder(http_root_dir).append("/examples");
-            std::cout << "After second truncation: " << http_root_dir << std::endl;
         }
 
         printf("Usage: %s [port] [http-root]\n", argv[0]);
@@ -168,14 +175,21 @@ namespace examples
     {
         namespace fs = std::filesystem;
 
-        auto http_root_dir = fs::current_path().generic_string().append("/examples");
+#ifdef __APPLE__
+      auto http_root_dir = std::filesystem::current_path().generic_string();
+      std::vector<std::string> buildtypes{"Debug", "Release", "MinSizeRel", "RelWithDebInfo"};
+      for (const auto& type : buildtypes) {
+        replace_substring_in_source(http_root_dir, std::format("/build/bin/{}", type), "");
+      }
+      http_root_dir.append("/examples");
+#else
+      auto http_root_dir = fs::current_path().generic_string().append("/examples");
+#endif
 
         if (not fs::exists(http_root_dir))
         {
             http_root_dir = truncate_directory_path_at_last_folder(fs::current_path());
-            std::cout << "After first truncation: " << http_root_dir << std::endl;
             http_root_dir = truncate_directory_path_at_last_folder(http_root_dir).append("/examples");
-            std::cout << "After second truncation: " << http_root_dir << std::endl;
         }
 
         static ImGuiWS imguiWS;
