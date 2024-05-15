@@ -1,3 +1,4 @@
+// INT32
 var imgui_ws = {
     canvas: null,
     gl: null,

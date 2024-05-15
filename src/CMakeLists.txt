@@ -1,5 +1,5 @@
 
-option(USE_INT32 "Use imgui-ws INT32 implementation; If this is false then INT16s are used." FALSE)
+option(USE_INT32 "Use imgui-ws INT32 implementation; If this is false then INT16s are used." TRUE)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

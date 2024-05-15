@@ -1,8 +1,8 @@
+// INT16
 var imgui_ws = {
     canvas: null,
     gl: null,
 
-    shader_program: null,
     vertex_buffer: null,
     index_buffer: null,
 
