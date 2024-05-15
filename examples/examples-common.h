@@ -102,8 +102,15 @@ namespace examples
 
         static ImGuiWS imguiWS;
 
-        auto http_root_dir = truncate_directory_path_at_last_folder(fs::current_path());
-        http_root_dir = truncate_directory_path_at_last_folder(http_root_dir).append("/examples");
+        auto http_root_dir = fs::current_path().generic_string().append("/examples");
+
+        if (not fs::exists(http_root_dir))
+        {
+            http_root_dir = truncate_directory_path_at_last_folder(fs::current_path());
+            std::cout << "After first truncation: " << http_root_dir << std::endl;
+            http_root_dir = truncate_directory_path_at_last_folder(http_root_dir).append("/examples");
+            std::cout << "After second truncation: " << http_root_dir << std::endl;
+        }
 
         printf("Usage: %s [port] [http-root]\n", argv[0]);
 
@@ -136,8 +143,15 @@ namespace examples
     {
         namespace fs = std::filesystem;
 
-        auto http_root_dir = truncate_directory_path_at_last_folder(fs::current_path());
-        http_root_dir = truncate_directory_path_at_last_folder(http_root_dir).append("/examples");
+        auto http_root_dir = fs::current_path().generic_string().append("/examples");
+
+        if (not fs::exists(http_root_dir))
+        {
+            http_root_dir = truncate_directory_path_at_last_folder(fs::current_path());
+            std::cout << "After first truncation: " << http_root_dir << std::endl;
+            http_root_dir = truncate_directory_path_at_last_folder(http_root_dir).append("/examples");
+            std::cout << "After second truncation: " << http_root_dir << std::endl;
+        }
 
         static ImGuiWS imguiWS;
 
