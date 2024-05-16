@@ -230,6 +230,11 @@ var imgui_ws = {
         this.n_draw_lists = incppect.get_int32('imgui.n_draw_lists');
         if (this.n_draw_lists < 1) return;
 
+        if (false) {
+            var n_draw_lists_json = JSON.stringify(this.n_draw_lists);
+            console.log(n_draw_lists_json);
+        }
+
         for (var i = 0; i < this.n_draw_lists; ++i) {
             this.draw_lists_abuf[i] = incppect.get_abuf('imgui.draw_list[%d]', i);
         }
