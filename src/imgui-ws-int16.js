@@ -229,12 +229,6 @@ var imgui_ws = {
     incppect_draw_lists: function(incppect) {
         this.n_draw_lists = incppect.get_int32('imgui.n_draw_lists');
         if (this.n_draw_lists < 1) return;
-
-        if (false) {
-            var n_draw_lists_json = JSON.stringify(this.n_draw_lists);
-            console.log(n_draw_lists_json);
-        }
-
         for (var i = 0; i < this.n_draw_lists; ++i) {
             this.draw_lists_abuf[i] = incppect.get_abuf('imgui.draw_list[%d]', i);
         }
@@ -256,7 +250,13 @@ var imgui_ws = {
         this.gl.enable(this.gl.SCISSOR_TEST);
 
         for (var i_list = 0; i_list < n_draw_lists; ++i_list) {
-            if (draw_lists_abuf[i_list].byteLength < 1) continue;
+       
+            if (draw_lists_abuf[i_list].byteLength < 1) {
+                console.log("raw_lists_abuf[i_list].byteLength:", draw_lists_abuf[i_list].byteLength );
+                continue
+            }
+
+            console.log("raw_lists_abuf[i_list].byteLength:", draw_lists_abuf[i_list].byteLength);
 
             var draw_data_offset = 0;
 
