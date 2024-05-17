@@ -27,13 +27,15 @@ endif()
 option(@USE_UINT32 "Use imgui-ws UINT32 implementation; If this is false then UINT16s are used." TRUE)
 
 if (@USE_UINT32)
-    #add_compile_definitions("ImDrawIdx=unsigned int")
+    set(ImDrawIdxTypeDeclare "#define ImDrawIdx unsigned int")
     file(READ "${IMGUI_WS_WORKING_DIR}/src/imgui-ws-int32.js" src_imgui-ws_js)
 else()
+    set(ImDrawIdxTypeDeclare "#define ImDrawIdx unsigned short")
     file(READ "${IMGUI_WS_WORKING_DIR}/src/imgui-ws-int16.js" src_imgui-ws_js)
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/common.h.in"    "${CMAKE_CURRENT_SOURCE_DIR}/common.h" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/imconfig.h.in"  "${CMAKE_BINARY_DIR}/_deps/imgui-src/imconfig.h" @ONLY)
 
 add_library(imgui-ws ${IMTUI_LIBRARY_TYPE}
     "${IMGUI_WS_WORKING_DIR}/src/imgui-ws.cpp"
