@@ -169,7 +169,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
 
         return std::string_view { data.data(), data.size() }; });
 
-    m_impl->incpp.handler([&](int clientId, incppect::EventType etype, std::string_view data)
+    m_impl->incpp.handler = [&](int clientId, incppect::EventType etype, std::string_view data)
                           {
         Event event;
 
@@ -286,7 +286,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
                 break;
         };
 
-        m_impl->events.push(std::move(event)); });
+        m_impl->events.push(std::move(event)); };
 
     resources.push_back("imgui-ws.js");
     m_impl->incpp.setResource("/imgui-ws.js", kImGuiWS_js);
