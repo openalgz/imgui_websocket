@@ -32,10 +32,34 @@ arch_type="$(uname -m)"
 #       be  nice to have.
 #os_version=TODO
 
-WIN64=false && [[ "msys" == "$OSTYPE" ]] && WIN64=true;WIN32=$WIN64
-LINUX=false && [[ "solaris*" == "$OSTYPE" ]] && LINUX=true
-APPLE=false && [[ "darwin*" == "$OSTYPE" ]] && APPLE=true
-BSD=false && [[ "bsd*" == "$OSTYPE" ]] && BSD=true
+# Check if the OS is Windows 64-bit
+if [[ "$OSTYPE" == msys ]]; then
+    WIN64=true
+else
+    WIN64=false
+fi
+WIN32=$WIN64
+
+# Check if the OS is Linux
+if [[ "$OSTYPE" == solaris* ]]; then
+    LINUX=true
+else
+    LINUX=false
+fi
+
+# Check if the OS is macOS
+if [[ "$OSTYPE" == darwin* ]]; then
+    APPLE=true
+else
+    APPLE=false
+fi
+
+# Check if the OS is BSD
+if [[ "$OSTYPE" == bsd* ]]; then
+    BSD=true
+else
+    BSD=false
+fi
 
 UBUNTU=false
 # [ -f /etc/os-release ] && grep -q "ubuntu" /etc/os-release;
