@@ -52,7 +52,7 @@ struct ImGuiWS::Impl
 
     std::atomic<int32_t> nConnected = 0;
 
-    std::thread worker;
+    std::future<void> worker;
     mutable std::shared_mutex mutex;
 
     Data dataWrite;
@@ -75,10 +75,7 @@ ImGuiWS::ImGuiWS() : m_impl(new Impl())
 ImGuiWS::~ImGuiWS()
 {
     m_impl->incpp.stop();
-    if (m_impl->worker.joinable())
-    {
-        m_impl->worker.join();
-    }
+    m_impl->worker.get();
 }
 
 bool ImGuiWS::addVar(const TPath &path, TGetter &&getter)
@@ -301,9 +298,9 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
         .sslKey = "key.pem",
         .sslCert = "cert.pem"};
 
-    m_impl->worker = m_impl->incpp.runAsync(parameters);
+    m_impl->worker = m_impl->incpp.run_async(parameters);
 
-    return m_impl->worker.joinable();
+    return true;
 }
 
 bool ImGuiWS::setTexture(TextureId textureId, Texture::Type textureType, int32_t width, int32_t height, const char *data)
