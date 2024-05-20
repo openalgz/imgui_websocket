@@ -88,7 +88,7 @@ void ImGuiWS::addResource(const std::string &url, const std::string &content)
     m_impl->incpp.setResource(url, content);
 }
 
-bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> resources)
+bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string> resources)
 {
     m_impl->incpp.var("my_id[%d]", [](const auto &idxs)
                       {
@@ -293,7 +293,7 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
         .port_listen = port,
         .max_payload = 1024 * 1024,
         .t_last_request_timeout_ms = -1,
-        .http_root = std::move(pathHttp),
+        .http_root = std::move(http_root),
         .resources = std::move(resources),
         .ssl_key = "key.pem",
         .ssl_cert = "cert.pem"};
@@ -362,12 +362,12 @@ bool ImGuiWS::setTexture(TextureId textureId, Texture::Type textureType, int32_t
     return true;
 }
 
-bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> resources, THandler &&handlerConnect, THandler &&handlerDisconnect)
+bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string> resources, THandler &&handlerConnect, THandler &&handlerDisconnect)
 {
     m_impl->handlerConnect = std::move(handlerConnect);
     m_impl->handlerDisconnect = std::move(handlerDisconnect);
 
-    return init(port, std::move(pathHttp), std::move(resources));
+    return init(port, std::move(http_root), std::move(resources));
 }
 
 bool ImGuiWS::setDrawData(const ImDrawData *drawData)
