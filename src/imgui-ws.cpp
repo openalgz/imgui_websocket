@@ -94,14 +94,14 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
                       {
         static int32_t id;
         id = idxs[0];
-        return incppect::view(id); });
+        return incpp::view(id); });
 
     // number of textures available
     m_impl->incpp.var("imgui.n_textures", [this](const auto &)
                       {
         std::shared_lock lock(m_impl->mutex);
 
-        return incppect::view(m_impl->dataRead.textures.size()); });
+        return incpp::view(m_impl->dataRead.textures.size()); });
 
     // texture ids
     m_impl->incpp.var("imgui.texture_id[%d]", [this](const auto &idxs)
@@ -112,7 +112,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
             return std::string_view { };
         }
 
-        return incppect::view(m_impl->dataRead.textureIdMap[idxs[0]]); });
+        return incpp::view(m_impl->dataRead.textureIdMap[idxs[0]]); });
 
     // texture revision
     m_impl->incpp.var("imgui.texture_revision[%d]", [this](const auto &idxs)
@@ -123,7 +123,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
             return std::string_view { };
         }
 
-        return incppect::view(m_impl->dataRead.textures[idxs[0]].revision); });
+        return incpp::view(m_impl->dataRead.textures[idxs[0]].revision); });
 
     // get texture by id
     m_impl->incpp.var("imgui.texture_data[%d]", [this](const auto &idxs)
@@ -146,7 +146,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
                       {
         std::shared_lock lock(m_impl->mutex);
 
-        return incppect::view(m_impl->dataRead.drawLists.size()); });
+        return incpp::view(m_impl->dataRead.drawLists.size()); });
 
     m_impl->incpp.var("imgui.draw_list[%d]", [this](const auto &idxs)
                       {
