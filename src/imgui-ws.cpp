@@ -85,7 +85,7 @@ bool ImGuiWS::addVar(const TPath &path, TGetter &&getter)
 
 void ImGuiWS::addResource(const std::string &url, const std::string &content)
 {
-    m_impl->incpp.setResource(url, content);
+    m_impl->incpp.set_resource(url, content);
 }
 
 bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string> resources)
@@ -287,7 +287,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
         m_impl->events.push(std::move(event)); };
 
     resources.push_back("imgui-ws.js");
-    m_impl->incpp.setResource("/imgui-ws.js", kImGuiWS_js);
+    m_impl->incpp.set_resource("/imgui-ws.js", kImGuiWS_js);
 
     // start the http/websocket server
     incpp::Parameters parameters{
