@@ -127,7 +127,7 @@ include(FetchContent)
    FetchContent_Declare(
       "incppect"
       GIT_REPOSITORY "https://github.com/openalgz/glue.git"
-      GIT_TAG "main"
+      GIT_TAG "json_ptr"
       GIT_SHALLOW TRUE
    )
    FetchContent_MakeAvailable("incppect")

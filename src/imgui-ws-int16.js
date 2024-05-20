@@ -151,16 +151,16 @@ var imgui_ws = {
     },
 
     incppect_textures: function(incppect) {
-        var n_textures = incppect.get_int32('imgui.n_textures');
+        var n_textures = incppect.get_int32('/imgui/n_textures');
 
         for (var i = 0; i < n_textures; ++i) {
-            var tex_id = incppect.get_int32('imgui.texture_id[%d]', i);
-            var tex_rev = incppect.get_int32('imgui.texture_revision[%d]', tex_id);
+            var tex_id = incppect.get_int32('/imgui/texture_id/{}', i);
+            var tex_rev = incppect.get_int32('/imgui/texture_revision/{}', tex_id);
 
             if (this.tex_map_abuf[tex_id] == null || this.tex_map_abuf[tex_id].byteLength < 1) {
-                this.tex_map_abuf[tex_id] = incppect.get_abuf('imgui.texture_data[%d]', tex_id);
+                this.tex_map_abuf[tex_id] = incppect.get_abuf('/imgui/texture_data/{}', tex_id);
             } else if (this.tex_map_abuf[tex_id] && (this.tex_map_id[tex_id] == null || this.tex_map_rev[tex_id] != tex_rev)) {
-                this.tex_map_abuf[tex_id] = incppect.get_abuf('imgui.texture_data[%d]', tex_id);
+                this.tex_map_abuf[tex_id] = incppect.get_abuf('/imgui/texture_data/{}', tex_id);
                 imgui_ws.init_tex(tex_id, tex_rev, this.tex_map_abuf[tex_id]);
             }
         }
@@ -227,10 +227,10 @@ var imgui_ws = {
     },
 
     incppect_draw_lists: function(incppect) {
-        this.n_draw_lists = incppect.get_int32('imgui.n_draw_lists');
+        this.n_draw_lists = incppect.get_int32('/imgui/n_draw_lists');
         if (this.n_draw_lists < 1) return;
         for (var i = 0; i < this.n_draw_lists; ++i) {
-            this.draw_lists_abuf[i] = incppect.get_abuf('imgui.draw_list[%d]', i);
+            this.draw_lists_abuf[i] = incppect.get_abuf('/imgui/draw_list/{}', i);
         }
     },
 
