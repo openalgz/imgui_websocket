@@ -293,7 +293,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
     incpp::Parameters parameters{
         .port_listen = port,
         .max_payload = 1024 * 1024,
-        .t_last_request_timeout_ms = -1,
+        .t_last_req_timeout_ms = -1,
         .http_root = std::move(http_root),
         .resources = std::move(resources),
         .ssl_key = "key.pem",
