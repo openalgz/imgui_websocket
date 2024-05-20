@@ -290,13 +290,13 @@ bool ImGuiWS::init(int32_t port, std::string pathHttp, std::vector<std::string> 
 
     // start the http/websocket server
     incpp::Parameters parameters{
-        .portListen = port,
-        .maxPayloadLength_bytes = 1024 * 1024,
-        .tLastRequestTimeout_ms = -1,
-        .httpRoot = std::move(pathHttp),
+        .port_listen = port,
+        .max_payload = 1024 * 1024,
+        .t_last_request_timeout_ms = -1,
+        .http_root = std::move(pathHttp),
         .resources = std::move(resources),
-        .sslKey = "key.pem",
-        .sslCert = "cert.pem"};
+        .ssl_key = "key.pem",
+        .ssl_cert = "cert.pem"};
 
     m_impl->worker = m_impl->incpp.run_async(parameters);
 
