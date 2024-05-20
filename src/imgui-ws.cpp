@@ -166,14 +166,15 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
 
         return std::string_view { data.data(), data.size() }; });
 
-    m_impl->incpp.handler = [&](int clientId, incppect::EventType etype, std::string_view data)
+    m_impl->incpp.handler = [&](int clientId, incppect::event etype, std::string_view data)
                           {
         Event event;
 
         event.clientId = clientId;
 
+        using enum incppect::event;
         switch (etype) {
-            case incppect::Connect:
+            case connect:
                 {
                     ++m_impl->nConnected;
                     event.type = Event::Connected;
@@ -188,7 +189,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
                     }
                 }
                 break;
-            case incppect::Disconnect:
+            case disconnect:
                 {
                     --m_impl->nConnected;
                     event.type = Event::Disconnected;
@@ -197,7 +198,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
                     }
                 }
                 break;
-            case incppect::Custom:
+            case custom:
                 {
                     std::stringstream ss;
                     ss << data;
