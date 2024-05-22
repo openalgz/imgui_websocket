@@ -1,6 +1,6 @@
 #include "project-demo.hpp"
 
-using namespace examples;
+using namespace demo;
 
 int main(int argc, char ** argv) {
 

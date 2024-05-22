@@ -9,3 +9,6 @@ data/
 .cquery_cache
 *.code-workspace
 .DS_Store
+
+# Generated file.git
+**/localhost-root-path.hpp

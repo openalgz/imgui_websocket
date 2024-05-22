@@ -26,14 +26,10 @@
 #include "imgui-ws.h"
 #endif
 
-namespace examples
-{
-#ifdef _WIN32
-    inline constexpr char path_separator = '\\';
-#else
-    inline constexpr char path_separator = '/';
-#endif
+#include "localhost-root-path.hpp"
 
+namespace demo
+{
     template <typename StrT>
     concept is_string =
         std::is_same_v<std::decay_t<StrT>, std::string> || std::is_same_v<std::decay_t<StrT>, std::string_view> ||
@@ -43,82 +39,48 @@ namespace examples
     concept is_filesystem_path_or_string =
         std::is_same_v<std::decay_t<StrT_Or_PathT>, std::filesystem::path> || is_string<StrT_Or_PathT>;
 
-    template <is_filesystem_path_or_string T>
-    inline bool resource_exists(const T &resource_path, const std::string_view runtime_name)
+    inline auto check_localhost_path(int argc, char **argv, const std::string_view example_name, int port, const std::string_view index_html_file_name = "index.html")
     {
         namespace fs = std::filesystem;
-        if (not fs::exists(resource_path))
-        {
-            std::cerr << "Resource path '" << resource_path << "' does not exist.\nExiting " << runtime_name << ".";
-            return false;
-        }
-        return true;
-    }
+        
+        std::string http_root_dir = localhost_root_path;
 
-    inline ImGuiWS &start_imgui_ws(int argc, char **argv, const std::string_view example_name, int port, const std::string_view index_html_file_name = "index.html")
-    {
-        namespace fs = std::filesystem;
+        printf("\nUsage: %s [port] [http-root]\n", argv[0]);
 
-        static ImGuiWS imguiWS;
-
-        std::string http_root_dir = "/home/wberry/Dev/imgui_websocket/src/project-demo/demo-ws";
-      
-        printf("Usage: %s [port] [http-root]\n", argv[0]);
-
-        // Override the port or http root directory.
         if (argc > 1)
             port = atoi(argv[1]);
         if (argc > 2)
             http_root_dir = argv[2];
 
-        // ensure the resource path is valid.
         auto resource_path = std::format("{}/{}", http_root_dir, index_html_file_name);
 
         if (not fs::exists(resource_path))
         {
-            std::cerr << std::format("Resource, '{}', could not be found!\nExiting '{}' startup.\n", resource_path, example_name);
+            std::cerr << std::format("Resource path, '{}', could not be found!\nExiting '{}' startup.\n", resource_path, example_name);
             exit(0);
         }
 
         std::cout << "\nurl: localhost:" << port << std::endl;
 
+        return http_root_dir;
+    }
+
+    inline ImGuiWS &start_imgui_ws(int argc, char **argv, const std::string_view example_name, int port, const std::string_view index_html_file_name = "index.html")
+    {
+        static ImGuiWS imguiWS;
+        std::string http_root_dir = check_localhost_path(argc, argv, example_name, port, index_html_file_name);
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
-
         imguiWS.init(port, http_root_dir, {"", index_html_file_name.data()});
-
         return imguiWS;
     }
 
     inline ImGuiWS &init_imgui_ws(int argc, char **argv, const std::string_view example_name, int port, const std::string_view index_html_file_name = "index.html")
     {
-        namespace fs = std::filesystem;
-
-        std::string http_root_dir = "/home/wberry/Dev/imgui_websocket/src/project-demo/demo-ws";
-
         static ImGuiWS imguiWS;
-
-        printf("Usage: %s [port] [http-root]\n", argv[0]);
-
-        // Override the port or http root directory.
-        if (argc > 1)
-            port = atoi(argv[1]);
-        if (argc > 2)
-            http_root_dir = argv[2];
-
-        auto resource_path = std::format("{}/{}", http_root_dir, index_html_file_name);
-
-        if (not fs::exists(resource_path))
-        {
-            std::cerr << std::format("Resource, '{}', could not be found!\nExiting '{}' startup.\n", resource_path, example_name);
-            exit(0);
-        }
-
-        std::cout << "\nurl: localhost:" << port << std::endl;
-
+        std::string http_root_dir = check_localhost_path(argc, argv, example_name, port, index_html_file_name);
         imguiWS.init(port, http_root_dir, {"", index_html_file_name.data()});
-
         return imguiWS;
     }
 

@@ -5,8 +5,8 @@ project(demo-ws)
 
 
 set(http_root_dir "\"${CMAKE_CURRENT_SOURCE_DIR}\"")
-set(template_path "${CMAKE_CURRENT_SOURCE_DIR}/project-demo.in.hpp")
-set(output_path "${CMAKE_CURRENT_SOURCE_DIR}/project-demo.hpp")
+set(template_path "${CMAKE_CURRENT_SOURCE_DIR}/localhost-root-path.in.hpp")
+set(output_path "${CMAKE_CURRENT_SOURCE_DIR}/localhost-root-path.hpp")
 configure_file("${template_path}" "${output_path}" @ONLY)
 
 add_executable(demo-ws main.cpp)
