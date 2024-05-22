@@ -1,6 +1,6 @@
 {
   "cmake.sourceDirectory": "${workspaceFolder}",
-  "cmake.parallelJobs": 0,
+  "cmake.parallelJobs":1,
   "cmake.generator": "Unix Makefiles",
   "files.associations": {
     "*.ipp": "cpp",

@@ -1,4 +1,4 @@
-#include "examples-common.h"
+#include "textures-null.hpp"
 
 using namespace examples;
 

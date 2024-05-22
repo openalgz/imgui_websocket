@@ -1,7 +1,4 @@
-#include "examples-common.h"
-
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include "basic-sdl2.hpp"
 
 using namespace examples;
 

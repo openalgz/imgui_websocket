@@ -1,4 +1,4 @@
-#include "examples-common.h"
+#include "demo-null.hpp"
 
 using namespace examples;
 
@@ -269,6 +269,7 @@ struct State
 
 int main(int argc, char **argv)
 {
+    constexpr auto port = 3002;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -280,7 +281,7 @@ int main(int argc, char **argv)
     ImGui::GetStyle().ScrollbarRounding = 0.0f;
 
     // setup imgui-ws
-    auto &imguiWS = init_imgui_ws(argc, argv, "demo-null", 3002);
+    auto &imguiWS = init_imgui_ws(argc, argv, "demo-null", port);
 
     // prepare font texture
     {
@@ -292,6 +293,8 @@ int main(int argc, char **argv)
 
     VSync vsync;
     State state;
+
+    open_url(port);
 
     while (true)
     {

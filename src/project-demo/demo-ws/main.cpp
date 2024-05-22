@@ -4,7 +4,9 @@ using namespace demo;
 
 int main(int argc, char ** argv) {
 
-    auto& imguiWS = start_imgui_ws(argc, argv, "demo-ws", 3000);
+    constexpr auto port = 3000;
+
+    auto& imguiWS = start_imgui_ws(argc, argv, "demo-ws", port);
     
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
@@ -18,6 +20,8 @@ int main(int argc, char ** argv) {
     }
 
     VSync vsync;
+
+    open_url(port);
 
     while (true) {
         io.DisplaySize = ImVec2(640, 480);

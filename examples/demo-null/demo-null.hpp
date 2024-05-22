@@ -28,7 +28,7 @@
 
 #include "localhost-root-path.hpp"
 
-namespace demo
+namespace examples
 {
     template <typename StrT>
     concept is_string =
@@ -39,17 +39,16 @@ namespace demo
     concept is_filesystem_path_or_string =
         std::is_same_v<std::decay_t<StrT_Or_PathT>, std::filesystem::path> || is_string<StrT_Or_PathT>;
 
-
     inline void open_url(int port)
     {
         std::string command = "http://localhost:" + std::to_string(port);
 
 #ifdef _WIN32
-        command = "start " + command; // For Windows
+        command = "start " + command;
 #elif __APPLE__
-        command = "open " + command; // For macOS
+        command = "open " + command;
 #else
-        command = "xdg-open " + command; // For Linux systems
+        command = "xdg-open " + command; // Linux
 #endif
         std::system(command.c_str());
     }
@@ -57,7 +56,7 @@ namespace demo
     inline auto check_localhost_path(int argc, char **argv, const std::string_view example_name, int port, const std::string_view index_html_file_name = "index.html")
     {
         namespace fs = std::filesystem;
-        
+
         std::string http_root_dir = localhost_root_path;
 
         printf("\nUsage: %s [port] [http-root]\n", argv[0]);

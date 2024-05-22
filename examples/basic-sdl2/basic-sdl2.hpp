@@ -26,9 +26,12 @@
 #include "imgui-ws.h"
 #endif
 
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 #include "localhost-root-path.hpp"
 
-namespace demo
+namespace examples
 {
     template <typename StrT>
     concept is_string =
@@ -38,21 +41,6 @@ namespace demo
     template <typename StrT_Or_PathT>
     concept is_filesystem_path_or_string =
         std::is_same_v<std::decay_t<StrT_Or_PathT>, std::filesystem::path> || is_string<StrT_Or_PathT>;
-
-
-    inline void open_url(int port)
-    {
-        std::string command = "http://localhost:" + std::to_string(port);
-
-#ifdef _WIN32
-        command = "start " + command; // For Windows
-#elif __APPLE__
-        command = "open " + command; // For macOS
-#else
-        command = "xdg-open " + command; // For Linux systems
-#endif
-        std::system(command.c_str());
-    }
 
     inline auto check_localhost_path(int argc, char **argv, const std::string_view example_name, int port, const std::string_view index_html_file_name = "index.html")
     {
