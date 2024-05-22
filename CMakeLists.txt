@@ -3,11 +3,11 @@ project(imgui-ws)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(IMGUI_WS_STANDALONE ON)
-    set(IMGUI_WS_WORKING_DIR "${CMAKE_SOURCE_DIR}")
 else()
     set(IMGUI_WS_STANDALONE OFF)
-    set(IMGUI_WS_WORKING_DIR "${CMAKE_BINARY_DIR}/_deps/imgui_websocket-src")
 endif()
+
+set(IMGUI_WS_WORKING_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 macro(suppress_compile_warnings)
     if (MSVC)
