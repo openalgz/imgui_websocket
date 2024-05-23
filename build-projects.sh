@@ -34,23 +34,23 @@ echo parallel_jobs
 show_usage() {
   echo -e "\n${i_yellow}Example Usage:${i_purple} $0 ${i_white}{Optional Args: ${i_purple}-c -f ${i_white}{config}${i_purple} -t ${i_white}{target_name}${i_white}}${i_def}" \
           "\n  -h or --help                    ${i_green}# Display help documentation.${i_def}" \
-          "\n  -c or --clean                   ${i_green}# Removes the '${build_dir}' directory${i_def}" \
+          "\n  -r or --remove                  ${i_green}# Removes the '${build_dir}' directory${i_def}" \
           "\n  -f or --config {config_option}  ${i_green}# Use to define Debug, Release, MinSizeRelease, etc.${i_def}"\
-          "\n  -t or --target {target_name}    ${i_green}# Defines the project name to build (default:${target_name}).${i_def}\n"\
+          "\n  -t or --target {target_name}    ${i_green}# Defines the project name to build (default:${target_name}).${i_def}"\
           "\n  -j or --j {n}                   ${i_green}# Specifies the number of parallel jobs to be used when building the\n"\
           "                                 ${i_green}# project (defaults to 0 which directs cmake to use all jobs avaliable).${i_def}\n"    
           
-  echo -e "${i_yellow}Default Options:${i_def}\n  --config ${config_option}\n  --target ${target_name}\n  --cmake_generator ${cmake_generator}\n  -j ${parallel_jobs}"
+  echo -e "${i_yellow}Default Options:${i_def}\n  --config ${config_option}\n  --target ${target_name}\n  --cmake_generator ${cmake_generator}\n  --j ${parallel_jobs}\n"
 }
 
 # Parse the command-line arguments
 #
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -c|--clean)
+    -r|--remove)
       rm -rf "${build_dir}"
       ;;
-    -f|--config)
+    -c|--config)
       config_option=$2
       shift
       ;;
@@ -63,7 +63,7 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     *)
-      echo "Invalid option: $1" >&2
+      #echo "Invalid option: $1" >&2
       clear
       show_usage
       exit 1
