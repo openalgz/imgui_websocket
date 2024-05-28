@@ -7,6 +7,8 @@ else()
     set(IMGUI_WS_STANDALONE OFF)
 endif()
 
+add_definitions(-DUWS_NO_ZLIB)
+
 set(IMGUI_WS_WORKING_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 macro(suppress_compile_warnings)
