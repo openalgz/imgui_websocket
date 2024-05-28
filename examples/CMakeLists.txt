@@ -7,11 +7,11 @@ macro(assign_local_host_root_path)
 endmacro()
 
 
-#if (IMGUI_WS_BUILD_EXAMPLES_NULL)
+if (IMGUI_WS_BUILD_EXAMPLES_NULL)
     add_subdirectory(basic-null)
     add_subdirectory(demo-null)
     add_subdirectory(textures-null)
-#endif()
+endif()
 
 if (IMGUI_WS_SUPPORT_SDL2 AND IMGUI_WS_BUILD_EXAMPLES_SDL2)
     add_subdirectory(basic-sdl2)
