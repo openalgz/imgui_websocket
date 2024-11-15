@@ -83,7 +83,7 @@ struct ImGuiWS
 
    int32_t nConnected() const;
 
-   std::deque<Event> takeEvents();
+   void takeEvents(std::deque<Event>& events);
 
    std::vector<char> texture_data;
    std::vector<char> draw_list_data;

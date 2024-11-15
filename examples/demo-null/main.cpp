@@ -299,7 +299,8 @@ int main(int argc, char **argv)
     while (true)
     {
         // websocket event handling
-        auto events = imguiWS.takeEvents();
+        std::deque<ImGuiWS::Event> events{};
+        imguiWS.takeEvents(events);
         for (auto &event : events)
         {
             state.handle(std::move(event));

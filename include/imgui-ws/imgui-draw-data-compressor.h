@@ -19,7 +19,6 @@ namespace ImDrawDataCompressor
       using DrawListDiff = std::vector<char>;
       using DrawListsDiff = std::vector<DrawListDiff>;
 
-      Interface() {}
       virtual ~Interface() {}
 
       virtual bool setDrawData(const ::ImDrawData* drawData) = 0;
@@ -44,13 +43,13 @@ namespace ImDrawDataCompressor
    {
       static constexpr auto kName = "XorRlePerDrawList";
 
-      virtual bool setDrawData(const ::ImDrawData* drawData) override;
+      bool setDrawData(const ::ImDrawData* drawData) override;
    };
 
    struct XorRlePerDrawListWithVtxOffset : public Interface
    {
       static constexpr auto kName = "XorRlePerDrawListWithVtxOffset";
 
-      virtual bool setDrawData(const ::ImDrawData* drawData) override;
+      bool setDrawData(const ::ImDrawData* drawData) override;
    };
 }
