@@ -43,11 +43,9 @@ struct ImGuiWS::Impl
       std::map<int, TextureId> textureIdMap;
       std::map<TextureId, Texture> textures;
 
-      ImDrawDataCompressor::Interface::DrawLists drawLists;
-      ImDrawDataCompressor::Interface::DrawListsDiff drawListsDiff;
+      ImDrawDataCompressor::Interface::DrawLists* draw_lists_ptr{};
+      ImDrawDataCompressor::Interface::DrawListsDiff* draw_lists_diff_ptr{};
    };
-
-   Impl() : compressorDrawData(new ImDrawDataCompressor::XorRlePerDrawListWithVtxOffset()) {}
 
    std::atomic<int32_t> nConnected = 0;
 
@@ -64,7 +62,7 @@ struct ImGuiWS::Impl
    THandler handlerConnect;
    THandler handlerDisconnect;
 
-   std::unique_ptr<ImDrawDataCompressor::Interface> compressorDrawData;
+   std::unique_ptr<ImDrawDataCompressor::Interface> compressorDrawData{new ImDrawDataCompressor::XorRlePerDrawListWithVtxOffset()};
 };
 
 ImGuiWS::ImGuiWS() : m_impl(new Impl()) {}
@@ -137,18 +135,20 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
    m_impl->incpp.var("/imgui/n_draw_lists", [this](const auto&) {
       std::shared_lock lock(m_impl->mutex);
 
-      return incpp::view(m_impl->dataRead.drawLists.size());
+      return incpp::view(m_impl->dataRead.draw_lists_ptr->size());
    });
 
    m_impl->incpp.var("/imgui/draw_list/{}", [this](const auto& idxs) {
       {
          std::shared_lock lock(m_impl->mutex);
 
-         if (idxs[0] >= (int)m_impl->dataRead.drawLists.size()) {
+         auto& drawLists = *(m_impl->dataRead.draw_lists_ptr);
+
+         if (idxs[0] >= (int)drawLists.size()) {
             return std::string_view{nullptr, 0};
          }
 
-         draw_list_data = m_impl->dataRead.drawLists[idxs[0]];
+         draw_list_data = drawLists[idxs[0]];
       }
 
       return std::string_view{draw_list_data.data(), draw_list_data.size()};
@@ -352,15 +352,12 @@ bool ImGuiWS::setDrawData(const ImDrawData* drawData)
 {
    bool result = m_impl->compressorDrawData->setDrawData(drawData);
 
-   auto& drawLists = m_impl->compressorDrawData->getDrawLists();
-   auto& drawListsDiff = m_impl->compressorDrawData->getDrawListsDiff();
-
    // make the draw lists available to incppect clients
    {
       std::unique_lock lock(m_impl->mutex);
 
-      m_impl->dataRead.drawLists = drawLists;
-      m_impl->dataRead.drawListsDiff = drawListsDiff;
+      m_impl->dataRead.draw_lists_ptr = &m_impl->compressorDrawData->draw_lists_cur;
+      m_impl->dataRead.draw_lists_diff_ptr = &m_impl->compressorDrawData->draw_lists_diff;
    }
 
    return result;

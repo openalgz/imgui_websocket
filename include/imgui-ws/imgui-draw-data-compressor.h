@@ -5,75 +5,52 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
 #include <memory>
+#include <vector>
 
 struct ImDrawData;
 
-namespace ImDrawDataCompressor {
+namespace ImDrawDataCompressor
+{
+   struct Interface
+   {
+      using DrawList = std::vector<char>;
+      using DrawLists = std::vector<DrawList>;
+      using DrawListDiff = std::vector<char>;
+      using DrawListsDiff = std::vector<DrawListDiff>;
 
-class Interface {
-public:
-    using DrawList = std::vector<char>;
-    using DrawLists = std::vector<DrawList>;
-    using DrawListDiff = std::vector<char>;
-    using DrawListsDiff = std::vector<DrawListDiff>;
+      Interface() {}
+      virtual ~Interface() {}
 
-    Interface() {}
-    virtual ~Interface() {}
+      virtual bool setDrawData(const ::ImDrawData* drawData) = 0;
 
-    virtual bool setDrawData(const ::ImDrawData * drawData) = 0;
+      uint64_t diffSize() const
+      {
+         uint64_t res = 0;
 
-    virtual DrawLists & getDrawLists() {
-        return m_drawListsCur;
-    }
-
-    virtual DrawListsDiff & getDrawListsDiff() {
-        return m_drawListsDiff;
-    }
-
-    virtual uint64_t diffSize() const {
-        uint64_t res = 0;
-
-        for (auto & list : m_drawListsDiff) {
+         for (const auto& list : draw_lists_diff) {
             res += list.size();
-        }
+         }
 
-        return res;
-    }
+         return res;
+      }
 
-protected:
-    DrawLists m_drawListsCur;
-    DrawLists m_drawListsPrev;
-    DrawListsDiff m_drawListsDiff;
-};
+      DrawLists draw_lists_cur;
+      DrawLists draw_lists_prev;
+      DrawListsDiff draw_lists_diff;
+   };
 
-class XorRlePerDrawList : public Interface {
-public:
-    static constexpr auto kName = "XorRlePerDrawList";
+   struct XorRlePerDrawList : public Interface
+   {
+      static constexpr auto kName = "XorRlePerDrawList";
 
-    XorRlePerDrawList();
-    virtual ~XorRlePerDrawList();
+      virtual bool setDrawData(const ::ImDrawData* drawData) override;
+   };
 
-    virtual bool setDrawData(const ::ImDrawData * drawData) override;
+   struct XorRlePerDrawListWithVtxOffset : public Interface
+   {
+      static constexpr auto kName = "XorRlePerDrawListWithVtxOffset";
 
-private:
-    struct Impl;
-    std::unique_ptr<Impl> m_impl;
-};
-
-class XorRlePerDrawListWithVtxOffset : public Interface {
-public:
-    static constexpr auto kName = "XorRlePerDrawListWithVtxOffset";
-
-    XorRlePerDrawListWithVtxOffset();
-    virtual ~XorRlePerDrawListWithVtxOffset();
-
-    virtual bool setDrawData(const ::ImDrawData * drawData) override;
-
-private:
-    struct Impl;
-    std::unique_ptr<Impl> m_impl;
-};
-
+      virtual bool setDrawData(const ::ImDrawData* drawData) override;
+   };
 }
