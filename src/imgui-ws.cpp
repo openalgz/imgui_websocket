@@ -350,9 +350,7 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
 
 bool ImGuiWS::setDrawData(const ImDrawData* drawData)
 {
-   bool result = true;
-
-   result &= m_impl->compressorDrawData->setDrawData(drawData);
+   bool result = m_impl->compressorDrawData->setDrawData(drawData);
 
    auto& drawLists = m_impl->compressorDrawData->getDrawLists();
    auto& drawListsDiff = m_impl->compressorDrawData->getDrawListsDiff();
@@ -361,8 +359,8 @@ bool ImGuiWS::setDrawData(const ImDrawData* drawData)
    {
       std::unique_lock lock(m_impl->mutex);
 
-      m_impl->dataRead.drawLists = std::move(drawLists);
-      m_impl->dataRead.drawListsDiff = std::move(drawListsDiff);
+      m_impl->dataRead.drawLists = drawLists;
+      m_impl->dataRead.drawListsDiff = drawListsDiff;
    }
 
    return result;
@@ -373,6 +371,5 @@ int32_t ImGuiWS::nConnected() const { return m_impl->nConnected; }
 std::deque<ImGuiWS::Event> ImGuiWS::takeEvents()
 {
    std::lock_guard<std::mutex> lock(m_impl->events.mutex);
-   auto res = std::move(m_impl->events.data);
-   return res;
+   return m_impl->events.data;
 }
