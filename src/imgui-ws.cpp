@@ -43,8 +43,8 @@ struct ImGuiWS::Impl
       std::map<int, TextureId> textureIdMap;
       std::map<TextureId, Texture> textures;
 
-      ImDrawDataCompressor::Interface::DrawLists* draw_lists_ptr{};
-      ImDrawDataCompressor::Interface::DrawListsDiff* draw_lists_diff_ptr{};
+      ImDrawDataCompressor::Interface::DrawLists draw_lists{};
+      ImDrawDataCompressor::Interface::DrawListsDiff draw_lists_diff{};
    };
 
    std::atomic<int32_t> nConnected = 0;
@@ -135,14 +135,14 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
    m_impl->incpp.var("/imgui/n_draw_lists", [this](const auto&) {
       std::shared_lock lock(m_impl->mutex);
 
-      return incpp::view(m_impl->dataRead.draw_lists_ptr->size());
+      return incpp::view(m_impl->dataRead.draw_lists.size());
    });
 
    m_impl->incpp.var("/imgui/draw_list/{}", [this](const auto& idxs) {
       {
          std::shared_lock lock(m_impl->mutex);
 
-         auto& drawLists = *(m_impl->dataRead.draw_lists_ptr);
+         auto& drawLists = m_impl->dataRead.draw_lists;
 
          if (idxs[0] >= (int)drawLists.size()) {
             return std::string_view{nullptr, 0};
@@ -356,8 +356,8 @@ bool ImGuiWS::setDrawData(const ImDrawData* drawData)
    {
       std::unique_lock lock(m_impl->mutex);
 
-      m_impl->dataRead.draw_lists_ptr = &m_impl->compressorDrawData->draw_lists_cur;
-      m_impl->dataRead.draw_lists_diff_ptr = &m_impl->compressorDrawData->draw_lists_diff;
+      std::swap(m_impl->dataRead.draw_lists, m_impl->compressorDrawData->draw_lists_cur);
+      std::swap(m_impl->dataRead.draw_lists_diff, m_impl->compressorDrawData->draw_lists_diff);
    }
 
    return result;
@@ -368,7 +368,6 @@ int32_t ImGuiWS::nConnected() const { return m_impl->nConnected; }
 void ImGuiWS::takeEvents(std::deque<Event>& events)
 {
    std::lock_guard<std::mutex> lock(m_impl->events.mutex);
-   //events = std::move(m_impl->events.data);
    events = m_impl->events.data;
    m_impl->events.data.clear();
 }
