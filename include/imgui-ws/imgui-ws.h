@@ -85,6 +85,9 @@ struct ImGuiWS {
 
   std::deque<Event> takeEvents();
 
+  std::vector<char> texture_data;
+  std::vector<char> draw_list_data;
+
 private:
   struct Impl;
   std::unique_ptr<Impl> m_impl;

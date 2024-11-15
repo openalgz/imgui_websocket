@@ -121,19 +121,16 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
 
    // get texture by id
    m_impl->incpp.var("/imgui/texture_data/{}", [this](const auto& idxs) {
-      static std::vector<char> data;
       {
          std::shared_lock lock(m_impl->mutex);
          if (m_impl->dataRead.textures.find(idxs[0]) == m_impl->dataRead.textures.end()) {
             return std::string_view{0, 0};
          }
-         data.clear();
-         std::copy(m_impl->dataRead.textures[idxs[0]].data.data(),
-                   m_impl->dataRead.textures[idxs[0]].data.data() + m_impl->dataRead.textures[idxs[0]].data.size(),
-                   std::back_inserter(data));
+
+         texture_data = m_impl->dataRead.textures[idxs[0]].data;
       }
 
-      return std::string_view{data.data(), data.size()};
+      return std::string_view{texture_data.data(), texture_data.size()};
    });
 
    // get imgui's draw data
@@ -144,7 +141,6 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
    });
 
    m_impl->incpp.var("/imgui/draw_list/{}", [this](const auto& idxs) {
-      static std::vector<char> data;
       {
          std::shared_lock lock(m_impl->mutex);
 
@@ -152,13 +148,10 @@ bool ImGuiWS::init(int32_t port, std::string http_root, std::vector<std::string>
             return std::string_view{nullptr, 0};
          }
 
-         data.clear();
-         std::copy(m_impl->dataRead.drawLists[idxs[0]].data(),
-                   m_impl->dataRead.drawLists[idxs[0]].data() + m_impl->dataRead.drawLists[idxs[0]].size(),
-                   std::back_inserter(data));
+         draw_list_data = m_impl->dataRead.drawLists[idxs[0]];
       }
 
-      return std::string_view{data.data(), data.size()};
+      return std::string_view{draw_list_data.data(), draw_list_data.size()};
    });
 
    m_impl->incpp.handler = [&](int clientId, incppect::event etype, std::string_view data) {
