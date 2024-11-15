@@ -11,6 +11,7 @@
 #include <map>
 #include <mutex>
 #include <shared_mutex>
+#include <span>
 #include <sstream>
 #include <thread>
 
@@ -43,8 +44,8 @@ struct ImGuiWS::Impl
       std::map<int, TextureId> textureIdMap;
       std::map<TextureId, Texture> textures;
 
-      ImDrawDataCompressor::Interface::DrawLists drawLists;
-      ImDrawDataCompressor::Interface::DrawListsDiff drawListsDiff;
+      std::span<ImDrawDataCompressor::Interface::DrawList> drawLists;
+      std::span<ImDrawDataCompressor::Interface::DrawListDiff> drawListsDiff;
    };
 
    Impl() : compressorDrawData(new ImDrawDataCompressor::XorRlePerDrawListWithVtxOffset()) {}
@@ -371,5 +372,6 @@ int32_t ImGuiWS::nConnected() const { return m_impl->nConnected; }
 std::deque<ImGuiWS::Event> ImGuiWS::takeEvents()
 {
    std::lock_guard<std::mutex> lock(m_impl->events.mutex);
-   return m_impl->events.data;
+   // TODO: get rid of this move
+   return std::move(m_impl->events.data);
 }
