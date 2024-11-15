@@ -365,9 +365,10 @@ bool ImGuiWS::setDrawData(const ImDrawData* drawData)
 
 int32_t ImGuiWS::nConnected() const { return m_impl->nConnected; }
 
-void ImGuiWS::takeEvents(std::deque<Event>& events)
+std::deque<ImGuiWS::Event> ImGuiWS::takeEvents()
 {
    std::lock_guard<std::mutex> lock(m_impl->events.mutex);
-   events = m_impl->events.data;
+   auto res = m_impl->events.data;
    m_impl->events.data.clear();
+   return res;
 }
