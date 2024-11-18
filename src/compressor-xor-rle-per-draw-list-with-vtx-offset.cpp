@@ -94,7 +94,6 @@ namespace ImDrawDataCompressor
 
       // calculate diff
 
-      draw_lists_diff.clear();
       draw_lists_diff.resize(nCmdLists);
 
       for (uint32_t iList = 0; iList < nCmdLists; ++iList) {

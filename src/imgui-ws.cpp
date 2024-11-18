@@ -71,6 +71,15 @@ ImGuiWS::~ImGuiWS()
 {
    m_impl->incpp.stop();
    m_impl->worker.get();
+
+   {
+      // TODO: This is need to avoid memory corruption upon deletion, but I have no idea why.
+      std::vector<char> texture_data_dummy;
+      std::swap(texture_data, texture_data_dummy);
+
+      std::vector<char> draw_list_data_dummy;
+      std::swap(draw_list_data, draw_list_data_dummy);
+   }
 }
 
 bool ImGuiWS::addVar(const TPath& path, TGetter&& getter) { return m_impl->incpp.var(path, std::move(getter)); }
