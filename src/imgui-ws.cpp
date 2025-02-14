@@ -69,8 +69,10 @@ ImGuiWS::ImGuiWS() : m_impl(new Impl()) {}
 
 ImGuiWS::~ImGuiWS()
 {
-   m_impl->incpp.stop();
-   m_impl->worker.get();
+   if (m_impl->worker.valid()) {
+      m_impl->incpp.stop();
+      m_impl->worker.get();
+   }
 
    {
       // TODO: This is need to avoid memory corruption upon deletion, but I have no idea why.
